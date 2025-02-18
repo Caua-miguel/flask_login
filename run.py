@@ -1,25 +1,41 @@
 
-from flask import Flask, render_template, request, url_for, redirect, session, flash, g
+from flask import Flask, render_template, url_for, redirect, g
+import flask
 from jinja2 import FileSystemLoader
-from functools import wraps
+import flask_login
 import os
 import sqlite3
 
 app = Flask(__name__)
 
 app.secret_key = "123"
-# app.database = "database/storege/sample.db"
 
-# login required decorator
-def login_required(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return f(*args, **kwargs)
-        else:
-            flash('You need to login first.')
-            return redirect(url_for('login'))
-    return wrap
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+users = {'admin': {'password': 'admin'}}
+
+class User(flask_login.UserMixin):
+    pass
+
+@login_manager.user_loader
+def user_loader(username):
+    if username not in users:
+        return
+    
+    user = User()
+    user.id = username
+    return user
+
+@login_manager.request_loader
+def request_loader(request):
+    username = request.form.get('username')
+    if username not in users:
+        return
+    
+    user = User()
+    user.id = username
+    return user
 
 template_dirs = [os.path.join(os.path.dirname(__file__), 'project', 'users', 'templates'),
                  os.path.join(os.path.dirname(__file__), 'project', 'templates')]
@@ -27,7 +43,7 @@ template_dirs = [os.path.join(os.path.dirname(__file__), 'project', 'users', 'te
 app.jinja_loader = FileSystemLoader(template_dirs)
 
 @app.route('/')
-@login_required
+@flask_login.login_required
 def home():
     g.db = connect_db()
     cur = g.db.execute('select * from posts')
@@ -37,22 +53,30 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid credentials! Please try again.'
-        else:
-            session['logged_in'] = True
-            flash('You were just logged in!')
-            return redirect(url_for('home'))
-    return render_template('login.html', error=error)
+    if flask.request.method == 'GET':
+            return render_template('login.html')
+    
+    username = flask.request.form['username']
+
+    if username in users and flask.request.form['password'] == users[username]['password']:
+        user = User()
+        user.id = username
+        flask_login.login_user(user)
+        return redirect(url_for('protected'))
+
+    return 'Bad login'
+    
+
+@app.route('/protected')
+@flask_login.login_required
+def protected():
+    return 'Logged in as: ' + flask_login.current_user.id
+
 
 @app.route('/logout')
-@login_required
 def logout():
-    session.pop('logged_in', None)
-    flash('You were just logged out!')
-    return redirect(url_for('welcome'))
+    flask_login.logout_user()
+    return 'Logged out'
 
 def connect_db():
     db_path = os.path.join(os.path.dirname(__file__), 'database', 'storage', 'sample.db')
