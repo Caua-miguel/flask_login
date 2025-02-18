@@ -1,43 +1,13 @@
 
-from flask import Flask, render_template, url_for, redirect, g
-import flask
-from jinja2 import FileSystemLoader
+from flask import render_template, url_for, redirect, g, request
+from project import app
 import flask_login
+from project.models import users, User
+from jinja2 import FileSystemLoader
 import os
 import sqlite3
 
-app = Flask(__name__)
-
-app.secret_key = "123"
-
-login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
-
-users = {'admin': {'password': 'admin'}}
-
-class User(flask_login.UserMixin):
-    pass
-
-@login_manager.user_loader
-def user_loader(username):
-    if username not in users:
-        return
-    
-    user = User()
-    user.id = username
-    return user
-
-@login_manager.request_loader
-def request_loader(request):
-    username = request.form.get('username')
-    if username not in users:
-        return
-    
-    user = User()
-    user.id = username
-    return user
-
-template_dirs = [os.path.join(os.path.dirname(__file__), 'project', 'users', 'templates'),
+template_dirs = [os.path.join(os.path.dirname(__file__), 'project', 'auth', 'templates'),
                  os.path.join(os.path.dirname(__file__), 'project', 'templates')]
 
 app.jinja_loader = FileSystemLoader(template_dirs)
@@ -53,12 +23,12 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if flask.request.method == 'GET':
+    if request.method == 'GET':
             return render_template('login.html')
     
-    username = flask.request.form['username']
+    username = request.form['username']
 
-    if username in users and flask.request.form['password'] == users[username]['password']:
+    if username in users and request.form['password'] == users[username]['password']:
         user = User()
         user.id = username
         flask_login.login_user(user)
