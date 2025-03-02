@@ -24,6 +24,6 @@ def welcome():
     return render_template('base.html')
 
 def connect_db():
-    db_path = os.path.join(os.path.dirname(__file__), '..', '..', 'database', 'storage', 'sample.db')
+    db_path = os.path.join(os.path.dirname(__file__), '..', '..', 'database', 'sample.db')
     return sqlite3.connect(db_path)
 
