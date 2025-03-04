@@ -6,6 +6,5 @@ def ler_comandos_sql(path):
 
 with sqlite3.connect("../sample.db") as connection:
     c = connection.cursor()
-    # c.execute("""DROP TABLE posts""")
     comados_sql = ler_comandos_sql("sql.sql")
     c.executescript(comados_sql)
