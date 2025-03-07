@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for
-from project.models import users, User
+from database.models import users, User
 import flask_login
 
 login_blueprint = Blueprint('login', __name__, template_folder='templates')

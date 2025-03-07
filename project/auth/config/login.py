@@ -1,5 +1,5 @@
 from project import login_manager
-from project.models import users, User
+from database.models import users, User
 
 @login_manager.user_loader
 def user_loader(username):
