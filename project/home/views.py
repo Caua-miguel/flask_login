@@ -9,7 +9,6 @@ home_blueprint = Blueprint('home', __name__, template_folder='templates')
 @login_required
 def home():
     users = db.session.query(User_ORM).all()
-    print(users)
     return render_template("index.html", users=users)
 
 @home_blueprint.route('/welcome')

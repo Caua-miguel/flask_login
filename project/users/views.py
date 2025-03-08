@@ -4,8 +4,15 @@ from database.models import User_ORM
 
 user_blueprint = Blueprint("user", __name__, template_folder="templates")
 
-@user_blueprint.route("/user", methods=['POST'])
+@user_blueprint.route("/user", methods=['GET', 'POST'])
 def user():
+
+    if request.method == 'GET':
+        users = db.session.query(User_ORM).all()
+        for user in users:
+           return jsonify(user.name, user.age, user.email)
+        
+
     data = request.get_json()
     newUser = User_ORM(name=data['name'], age=data['age'], email=data['email'])
     db.session.add(newUser)
