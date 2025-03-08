@@ -7,7 +7,8 @@ Esse projeto é o back-end do repositório **/react-good-practices**, ele propor
 - python==3.13.1
 - Flask==3.1.0
 
-As demais bibliotecas e suas versão estão no arquivo requirements.txt. O banco de dados usado está sendo o sqlite com sqlite3 para facilitar a integração com o banco e agilizar os testes.
+As demais bibliotecas e suas versão estão no arquivo requirements.txt. Após instalar os requirimentos, como o projeto usa flask-migrate, você pode usar o comando **flask db init** seguido de **flask db upgrade**
+para criar o banco de dados do projeto.
 
 ## Funcionamento do projeto
 
