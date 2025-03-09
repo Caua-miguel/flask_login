@@ -20,12 +20,12 @@ def user():
     db.session.commit()
     return jsonify({'message': 'Usuário adicionado com sucesso!'}), 201
 
-@user_blueprint.route("/user/<int:id>/delete", methods=["GET", "POST"])
+@user_blueprint.route("/user/<int:id>/delete", methods=["GET", "DELETE"])
 def delete(id):
     user_by_id = db.get_or_404(User_ORM, id)
 
-    if request.method == "POST":
+    if request.method == "DELETE":
         db.session.delete(user_by_id)
         db.session.commit()
-        return redirect(url_for("home.home"))
-    return render_template("delete.html", user_by_id=user_by_id)
+        return jsonify({'message': 'Usuário deletado com sucesso!'}), 201
+    return jsonify({'message': 'Method delete'}), 201
