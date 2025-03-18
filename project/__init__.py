@@ -29,4 +29,4 @@ app.register_blueprint(login_blueprint)
 app.register_blueprint(user_blueprint)
 
 # Importa o user_loader
-# from project.auth.config import login
+from project.auth.config import login
