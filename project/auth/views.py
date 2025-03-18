@@ -21,8 +21,6 @@ def login():
     
     if not bcrypt.check_password_hash(user.password, password):
         return jsonify({"error": "Unauthorized"}), 401
-    
-    user.id = email
 
     flask_login.login_user(user)
 
