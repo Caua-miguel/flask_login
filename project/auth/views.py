@@ -1,24 +1,32 @@
-from flask import Blueprint, request, render_template, redirect, url_for
-from database.models import users, User
+from flask import Blueprint, request, jsonify
+from database.models import User_ORM
 import flask_login
+# from project import bcrypt
 
 login_blueprint = Blueprint('login', __name__, template_folder='templates')
 
-@login_blueprint.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'GET':
-            return render_template('login.html')
+# @login_blueprint.route('/login', methods=['GET', 'POST'])
+# def login():
+
+#     email = request.json["email"]
+#     password = request.json["password"]
+
+#     user = User_ORM.query.filter_by(email=email).first()
+
+#     if user is None:
+#         return jsonify({"error": "Unauthorized"}), 401
     
-    username = request.form['username']
+#     if not bcrypt.check_password_hash(user.password, password):
+#         return jsonify({"error": "Unauthorized"}), 401
+    
+#     user.id = email
 
-    if username in users and request.form['password'] == users[username]['password']:
-        user = User()
-        user.id = username
-        flask_login.login_user(user)
-        print("Login: " + username + " Senha:"+ request.form['password'])
-        return redirect(url_for('login.protected'))
+#     flask_login.login_user(user)
 
-    return 'Bad login'
+#     return jsonify({
+#         "id": user.id,
+#         "email": user.email
+#     })
     
 @login_blueprint.route('/protected')
 @flask_login.login_required

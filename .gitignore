@@ -6,3 +6,4 @@ blog
 coverage
 tag.py
 instance
+.env
