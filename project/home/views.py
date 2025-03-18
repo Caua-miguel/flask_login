@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from database.db import db
+from database.models import db
 from database.models import User_ORM
 from flask_login import login_required
 

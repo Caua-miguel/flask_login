@@ -1,6 +1,8 @@
 import flask_login
-from database.db import db, SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from uuid import uuid4
+
+db = SQLAlchemy()
 
 def get_uuid():
     return uuid4().hex
@@ -20,5 +22,4 @@ class User_ORM(db.Model, flask_login.UserMixin):
             'name': self.name,
             'age': self.age,
             'email': self.email,
-            'password': self.password
         }

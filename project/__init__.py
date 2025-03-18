@@ -1,17 +1,19 @@
 from flask import Flask
 import flask_login
 from flask_cors import CORS
-from database.db import db, AplicationConfig
+from database.db import AplicationConfig
+from database.models import db
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-from flask_session import Session
 
 app = Flask(__name__)
-# app.config.from_object(AplicationConfig)
-# bcrypt = Bcrypt(app)
+app.config.from_object(AplicationConfig)
+bcrypt = Bcrypt(app)
 CORS(app)
-# server_session = Session(app)
 db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 migrate = Migrate(app, db)
 
@@ -28,6 +30,3 @@ app.register_blueprint(user_blueprint)
 
 # Importa o user_loader
 # from project.auth.config import login
-
-with app.app_context():
-    db.create_all()
