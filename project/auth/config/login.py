@@ -1,27 +1,22 @@
 from project import login_manager
-from database.models import User_ORM, db
+from database.models import User_ORM
 
 @login_manager.user_loader
-def user_loader(email):
+def user_loader(user_id):
+    user = User_ORM.query.filter_by(id=user_id).first()
 
-    users = db.session.query(User_ORM).all()
-    user = User_ORM.query.filter_by(email=email).first()
-
-    if email not in users:
+    if not user:
         return
-    
+
     return user
 
 @login_manager.request_loader
 def request_loader(request):
     
-    email = request.form.get('email')
-
-    users = db.session.query(User_ORM).all()
-    user = User_ORM.query.filter_by(email=email).first()
-
+    id = request.form.get('id')
+    user = User_ORM.query.filter_by(id=id).first()
     
-    if email not in users:
+    if not user:
         return
     
     return user

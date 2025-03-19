@@ -11,17 +11,17 @@ def login():
     if request.method == 'GET':
         return jsonify({"Error": "Method GET!"})
 
-    email = request.json["email"]
+    id = request.json["id"]
     password = request.json["password"]
 
-    user = User_ORM.query.filter_by(email=email).first()
+    user = User_ORM.query.filter_by(id=id).first()
 
     if user is None:
-        return jsonify({"error": "Unauthorized"}), 401
+        return jsonify({"error": "Unathorized"}), 401
     
     if not bcrypt.check_password_hash(user.password, password):
         return jsonify({"error": "Unauthorized"}), 401
-
+    
     flask_login.login_user(user)
 
     return jsonify({
