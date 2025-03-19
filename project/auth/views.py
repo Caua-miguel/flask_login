@@ -32,9 +32,9 @@ def login():
 @login_blueprint.route('/protected')
 @flask_login.login_required
 def protected():
-    return 'Logged in as: ' + flask_login.current_user.id
+    return jsonify({"Logged in as: ": flask_login.current_user.id})
 
 @login_blueprint.route('/logout')
 def logout():
     flask_login.logout_user()
-    return 'Logged out'
+    return jsonify({"Message": "Logged out"})
