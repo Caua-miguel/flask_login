@@ -7,3 +7,4 @@ coverage
 tag.py
 instance
 .env
+__pycache__
