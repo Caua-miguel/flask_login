@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from database.models import User
+from database.models import Users
 import flask_login
 from project import bcrypt
 
@@ -14,7 +14,7 @@ def login():
     id = request.json["id"]
     password = request.json["password"]
 
-    user = User.query.filter_by(id=id).first()
+    user = Users.query.filter_by(id=id).first()
 
     if user is None:
         return jsonify({"error": "Unathorized"}), 401
