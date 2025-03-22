@@ -1,8 +1,8 @@
 from flask import Flask
 import flask_login
 from flask_cors import CORS
-from database.db import AplicationConfig
-from database.models import db
+from database.config.db import AplicationConfig
+from database.models.users import db
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 

@@ -1,8 +1,6 @@
 import flask_login
-from flask_sqlalchemy import SQLAlchemy
 from uuid import uuid4
-
-db = SQLAlchemy()
+from database.config.db import db
 
 def get_uuid():
     return uuid4().hex

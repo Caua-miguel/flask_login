@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
 import redis
 import os
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
 
 load_dotenv()
 
