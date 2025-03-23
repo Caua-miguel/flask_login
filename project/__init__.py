@@ -12,9 +12,6 @@ bcrypt = Bcrypt(app)
 CORS(app)
 db.init_app(app)
 
-# with app.app_context():
-#     db.create_all()
-
 migrate = Migrate(app, db)
 
 login_manager = flask_login.LoginManager()
