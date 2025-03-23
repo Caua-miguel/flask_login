@@ -12,8 +12,23 @@ para criar o banco de dados do projeto.
 
 ## Funcionamento do projeto
 
-Estou usando o flask com as blueprints para separar as rotas, o arquivo run.py serve apenas para iniciar o servidor, o arquivo __init__.py dentro da pasta project é onde fica as configurações do flask.
-Para o login, temos a pasta auth que armazena as configurações do login-manager, a view e o templante. Temos mais a pasta home e users seguindo a mesma estrutura para armazenar as rotas, templates, etc...
+Para rodar o projeto você precisa criar sua pasta .env para armazenar a chave secreta do flask e seguir os seguintes passos:
 
-Quanto ao banco de dados, estou usando uma pasta storage dentro de database para armazenar os arquivos sql.py e sql.sql onde o arquivo .sql armazena apenas os comandos sql e o arquivo sql.py conecta com
-banco e executa os comandos do arquivo .sql.
+Instalação dos requisitos
+
+`pip install -r requirements.txt`
+
+Iniciar e ajustar o banco de dados sqlite, seguindo a própria documentação do flask-migrate
+
+```
+flask db init
+
+flask db migrate
+
+flask db upgrade
+```
+Em seguida, basta executar o arquivo app.py
+
+`python app.py`
+
+
