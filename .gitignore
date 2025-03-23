@@ -8,3 +8,4 @@ tag.py
 instance
 .env
 __pycache__
+migrations
