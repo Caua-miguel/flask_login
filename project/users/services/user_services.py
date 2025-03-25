@@ -1,0 +1,1 @@
+# Classe com os métodos (select, create, update, delete)
