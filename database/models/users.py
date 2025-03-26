@@ -11,7 +11,7 @@ class Users(db.Model, flask_login.UserMixin):
     id = db.Column(db.String(32), primary_key=True, unique=True, default=get_uuid)
     name = db.Column(db.String(255), nullable=False)
     age = db.Column(db.String(345), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False) # Tornar unico ao ajustar o login
     password = db.Column(db.Text, nullable=False)
 
     def as_dict(self):

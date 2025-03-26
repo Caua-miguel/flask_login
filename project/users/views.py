@@ -1,47 +1,27 @@
-from flask import Blueprint, jsonify, request
-from project import bcrypt
-from database.config.db import db
-from database.models.users import Users
+from flask import Blueprint, jsonify
+from project.users.services.user_services import User
 
 user_blueprint = Blueprint("user", __name__, template_folder="templates")
 
-@user_blueprint.route("/user", methods=['GET', 'POST'])
-def user():
+@user_blueprint.route("/user")
+def user(): 
+    users = User.select_users()
+    return jsonify(users), 201
 
-    if request.method == 'GET':
-        users = db.session.query(Users).all()
-        users_list = [user.as_dict() for user in users]
-        return jsonify(users_list)
-    
-    data = request.get_json()
-    password = data['password']  
-    
-    user_exists = Users.query.filter_by(email=data['email']).first() is not None    
-    
+@user_blueprint.route("/register", methods=["POST"])
+def register_user():
+    user_exists = User.user_exists()   
     if user_exists:
         return jsonify({"error": "User already exists!"}), 409
-    hash_password = bcrypt.generate_password_hash(password)
-    newUser = Users(name=data['name'], age=data['age'], email=data['email'], password=hash_password)
-    db.session.add(newUser)
-    db.session.commit()
-    return jsonify({'message': 'Usuário adicionado com sucesso!'}), 201
+    User.insert_user()
+    return jsonify({'message': 'User added successfully!'}), 201
 
 @user_blueprint.route("/user/<string:id>/update", methods=["PUT"])
 def update_user(id):
-    
-    data = request.get_json() 
-    Users.query.filter_by(id=id).update(data)
-    db.session.commit()
+    User.update_user(id)
+    return jsonify({'message': 'User updated successfully!'}), 201
 
-    return jsonify({'message': 'Usuário atualizado com sucesso!'}), 201
-    
-
-@user_blueprint.route("/user/<string:id>/delete", methods=["GET", "DELETE"])
+@user_blueprint.route("/user/<string:id>/delete", methods=["DELETE"])
 def delete(id):
-    user_by_id = db.get_or_404(Users, id)
-
-    if request.method == "DELETE":
-        db.session.delete(user_by_id)
-        db.session.commit()
-        return jsonify({'message': 'Usuário deletado com sucesso!'}), 201
-    return jsonify({'message': 'Method delete'}), 201
+    User.delete_user(id)
+    return jsonify({'message': 'User deleted successfully!'}), 201
